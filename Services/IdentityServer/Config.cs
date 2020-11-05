@@ -22,6 +22,23 @@ namespace IdentityServer
 
         public static IEnumerable<Client> Clients =>
             new Client[]
-            { };
+            {
+                new Client
+                {
+                    ClientId = "client",
+
+                    // no interactive user, use the clientid and secret for authentication
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    // scope for that client has access to
+                    AllowedScopes = { "remindersmgt" }
+                }
+            };
     }
 }
