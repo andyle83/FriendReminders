@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RemindersManagement.API.Domain.Models;
@@ -10,6 +11,7 @@ namespace RemindersManagement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RemindersController : ControllerBase
     {
         private readonly ILogger<RemindersController> _logger;
