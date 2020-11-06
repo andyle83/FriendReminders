@@ -25,6 +25,7 @@ namespace WebApi
 
             services.AddHttpClient();
             services.AddScoped<IIdentityClient, IdentityClient>();
+            services.AddScoped<IReminderClient, RemindersClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
