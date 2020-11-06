@@ -1,14 +1,18 @@
 ﻿using IdentityModel.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using WebApi.Features.Reminders.DataContracts;
 
 namespace WebApi.RestClients
 {
     public interface IReminderClient
     {
-        public Task<string> GetReminders(string accessToken, string query);
+        public Task<List<ReminderResponse>> GetReminders(string accessToken, string query);
     }
 
     public class RemindersClient : IReminderClient
@@ -26,19 +30,42 @@ namespace WebApi.RestClients
             _logger = logger;
         }
 
-        public async Task<string> GetReminders(string accessToken, string query)
+        public async Task<List<ReminderResponse>> GetReminders(string accessToken, string query)
         {
             var apiClient = _clientFactory.CreateClient();
+
             apiClient.SetBearerToken(accessToken);
 
-            var response = await apiClient.GetAsync($"{_configuration.GetValue<string>("RemindersMgtService:Uri")}/{query}");
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                _logger.LogError(response.StatusCode.ToString());
-                return null;
+                var response = await apiClient.GetAsync($"{_configuration.GetValue<string>("RemindersMgtService:Uri")}/{query}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning(response.StatusCode.ToString());
+                    return null;
+                }
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                var result = JsonConvert.DeserializeObject<List<ReminderResponse>>(responseContent);
+
+                return result;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"Unable to get reminders list via HTTP request {ex.Message}");
+            }
+            catch (JsonSerializationException ex)
+            {
+                _logger.LogError($"Unable to deserialize reminders result {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Unable to return reminders list {ex.Message}");
             }
 
-            return await response.Content.ReadAsStringAsync();
+            return null;
         }
     }
 }
