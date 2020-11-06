@@ -11,21 +11,37 @@ namespace WebApi.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private IIdentityClient _identityClient;
+        private IReminderClient _reminderClient;
 
-        public AccountController(ILogger<AccountController> logger, IIdentityClient identityClient)
+        public AccountController(ILogger<AccountController> logger, IIdentityClient identityClient, IReminderClient reminderClient)
         {
             _identityClient = identityClient;
+            _reminderClient = reminderClient;
             _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        [Route("Token/")]
+        public async Task<IActionResult> GetToken()
         {
             // Checking discovery token via HttpClient
             _logger.LogInformation("Get access token from a REST Client");
             var token = await _identityClient.GetAccessToken();
 
             return Ok(token);
+        }
+
+        [HttpGet]
+        [Route("Reminders/")]
+        public async Task<IActionResult> GetReminders()
+        {
+            _logger.LogInformation("Get access token from REST Client of Identity Server");
+            var tokenResponse = await _identityClient.GetAccessToken();
+
+            _logger.LogInformation("Get reminders from REST Client of Reminders Management Service");
+            var result = await _reminderClient.GetReminders(tokenResponse.AccessToken, "api/Reminders");
+
+            return Ok(result);
         }
     }
 }

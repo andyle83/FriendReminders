@@ -1,7 +1,6 @@
 ﻿using IdentityModel.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -9,7 +8,7 @@ namespace WebApi.RestClients
 {
     public interface IIdentityClient
     {
-        public Task<JObject> GetAccessToken();
+        public Task<TokenResponse> GetAccessToken();
     }
 
     public class IdentityClient : IIdentityClient
@@ -25,7 +24,7 @@ namespace WebApi.RestClients
             _logger = logger;
         }
 
-        public async Task<JObject> GetAccessToken()
+        public async Task<TokenResponse> GetAccessToken()
         {
             // Checking discovery token via HttpClient
             var client = _clientFactory.CreateClient();
@@ -52,7 +51,7 @@ namespace WebApi.RestClients
                 return null;
             }
 
-            return tokenResponse.Json;
+            return tokenResponse;
         }
     }
 }
