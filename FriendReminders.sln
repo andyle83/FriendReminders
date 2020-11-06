@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{A011A24B-1A7D-4E9C-AB8D-156A01E130AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemindersManagement.API", "Services\RemindersManagement\RemindersManagement.API\RemindersManagement.API.csproj", "{FFB581BD-7A3C-4454-AA24-3EB2F4D827E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemindersManagement.API", "Services\RemindersManagement\RemindersManagement.API\RemindersManagement.API.csproj", "{FFB581BD-7A3C-4454-AA24-3EB2F4D827E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemindersManagement.UnitTests", "Services\RemindersManagement\RemindersManagement.UnitTests\RemindersManagement.UnitTests.csproj", "{E0A53F57-866C-470D-91FB-F2C6A5B31BC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemindersManagement.UnitTests", "Services\RemindersManagement\RemindersManagement.UnitTests\RemindersManagement.UnitTests.csproj", "{E0A53F57-866C-470D-91FB-F2C6A5B31BC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer", "Services\IdentityServer\IdentityServer.csproj", "{CE967A74-1914-4167-B9EF-7D541B157F73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "Services\IdentityServer\IdentityServer.csproj", "{CE967A74-1914-4167-B9EF-7D541B157F73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Services\WebApi\WebApi.csproj", "{B0D8318F-9EF1-4865-8CF7-7206E1DCE985}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "Services\WebApi\WebApi.csproj", "{B0D8318F-9EF1-4865-8CF7-7206E1DCE985}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FFB581BD-7A3C-4454-AA24-3EB2F4D827E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -75,10 +72,16 @@ Global
 		{B0D8318F-9EF1-4865-8CF7-7206E1DCE985}.Release|x86.ActiveCfg = Release|Any CPU
 		{B0D8318F-9EF1-4865-8CF7-7206E1DCE985}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FFB581BD-7A3C-4454-AA24-3EB2F4D827E4} = {A011A24B-1A7D-4E9C-AB8D-156A01E130AB}
 		{E0A53F57-866C-470D-91FB-F2C6A5B31BC4} = {A011A24B-1A7D-4E9C-AB8D-156A01E130AB}
 		{CE967A74-1914-4167-B9EF-7D541B157F73} = {A011A24B-1A7D-4E9C-AB8D-156A01E130AB}
 		{B0D8318F-9EF1-4865-8CF7-7206E1DCE985} = {A011A24B-1A7D-4E9C-AB8D-156A01E130AB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1FF39AD3-365F-4745-AB93-CDCE4691BF3D}
 	EndGlobalSection
 EndGlobal

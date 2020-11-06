@@ -25,7 +25,7 @@ namespace IdentityServer
             {
                 new Client
                 {
-                    ClientId = "client",
+                    ClientId = "webapi",
 
                     // no interactive user, use the clientid and secret for authentication
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
