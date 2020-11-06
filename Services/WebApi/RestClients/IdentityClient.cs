@@ -15,18 +15,20 @@ namespace WebApi.RestClients
     public class IdentityClient : IIdentityClient
     {
         private readonly ILogger<IdentityClient> _logger;
+        private readonly IHttpClientFactory _clientFactory;
         private IConfiguration _configuration;
 
-        public IdentityClient(IConfiguration configurationt, ILogger<IdentityClient> logger)
+        public IdentityClient(IConfiguration configurationt, IHttpClientFactory clientFactory, ILogger<IdentityClient> logger)
         {
             _configuration = configurationt;
+            _clientFactory = clientFactory;
             _logger = logger;
         }
 
         public async Task<JObject> GetAccessToken()
         {
             // Checking discovery token via HttpClient
-            var client = new HttpClient();
+            var client = _clientFactory.CreateClient();
             var disco = await client.GetDiscoveryDocumentAsync(_configuration.GetValue<string>("IdentityServer:Uri"));
 
             if (disco.IsError)
