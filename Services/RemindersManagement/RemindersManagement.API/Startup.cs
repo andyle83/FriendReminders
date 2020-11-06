@@ -66,8 +66,8 @@ namespace RemindersManagement.API
             // Register the Swagger generator
             services.AddSwaggerGen(config =>
             {
-    // Addubg JWT Authentication
-    var securityScheme = new OpenApiSecurityScheme
+                // Addubg JWT Authentication
+                var securityScheme = new OpenApiSecurityScheme
                 {
                     Name = "JWT Authentication",
                     Description = "Enter JWT Bearer token **_only_**",
