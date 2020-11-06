@@ -1,8 +1,7 @@
-﻿using IdentityModel.Client;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
 using System.Threading.Tasks;
+using WebApi.RestClients;
 
 namespace WebApi.Controllers
 {
@@ -11,9 +10,11 @@ namespace WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> _logger;
+        private IIdentityClient _identityClient;
 
-        public AccountController(ILogger<AccountController> logger)
+        public AccountController(ILogger<AccountController> logger, IIdentityClient identityClient)
         {
+            _identityClient = identityClient;
             _logger = logger;
         }
 
@@ -21,31 +22,10 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Get()
         {
             // Checking discovery token via HttpClient
-            var client = new HttpClient();
-            var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001");
+            _logger.LogInformation("Get access token from a REST Client");
+            var token = await _identityClient.GetAccessToken();
 
-            if (disco.IsError)
-            {
-                _logger.LogError(disco.Error);
-                return BadRequest();
-            }
-
-            // Request token
-            var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-            {
-                Address = disco.TokenEndpoint,
-                ClientId = "webapi",
-                ClientSecret = "secret",
-                Scope = "remindersmgt"
-            });
-
-            if (tokenResponse.IsError)
-            {
-                _logger.LogError(tokenResponse.Error);
-                return BadRequest();
-            }
-
-            return Ok(tokenResponse.Json);
+            return Ok(token);
         }
     }
 }
