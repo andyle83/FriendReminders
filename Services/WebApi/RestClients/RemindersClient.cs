@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,7 +39,10 @@ namespace WebApi.RestClients
 
             try
             {
-                var response = await apiClient.GetAsync($"{_configuration.GetValue<string>("RemindersMgtService:Uri")}/{query}");
+                var response = await Policy
+                    .Handle<HttpRequestException>()
+                    .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(3))
+                    .ExecuteAsync(() => apiClient.GetAsync($"{_configuration.GetValue<string>("RemindersMgtService:Uri")}/{query}"));
 
                 if (!response.IsSuccessStatusCode)
                 {
