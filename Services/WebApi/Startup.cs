@@ -23,6 +23,7 @@ namespace WebApi
                 .AddControllers()
                 .AddNewtonsoftJson();
 
+            services.AddHttpClient();
             services.AddScoped<IIdentityClient, IdentityClient>();
         }
 
