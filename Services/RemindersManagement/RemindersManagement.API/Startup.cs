@@ -1,4 +1,5 @@
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Prometheus;
 using RemindersManagement.API.Domain.Interfaces;
 using RemindersManagement.API.Domain.Services;
@@ -36,10 +38,10 @@ namespace RemindersManagement.API
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "https://localhost:5001";
+                    options.Authority = Configuration.GetValue<string>("IdentityServer:Uri");
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateAudience = false
+                        ValidateAudience = Configuration.GetValue<bool>("IdentityServer:ValidateAudience")
                     };
                 });
 
@@ -62,7 +64,30 @@ namespace RemindersManagement.API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Register the Swagger generator
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(config =>
+            {
+    // Addubg JWT Authentication
+    var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "JWT Authentication",
+                    Description = "Enter JWT Bearer token **_only_**",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+
+                config.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+                config.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    { securityScheme, new string [] { } }
+                });
+            });
 
             // Register health check services
             services.AddHealthChecks();
