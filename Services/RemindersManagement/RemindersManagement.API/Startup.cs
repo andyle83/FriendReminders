@@ -45,6 +45,15 @@ namespace RemindersManagement.API
                     };
                 });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "remindersmgt");
+                });
+            });
+
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
 
             services.Configure<ForwardedHeadersOptions>(options =>
@@ -126,7 +135,9 @@ namespace RemindersManagement.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints
+                .MapControllers()
+                .RequireAuthorization("ApiScope");
             });
 
             // Enable middleware to serve generated Swagger as JSON endpoint
