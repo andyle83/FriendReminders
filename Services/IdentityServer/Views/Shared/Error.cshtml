@@ -1,10 +1,8 @@
 @model ErrorViewModel
 
-@{
-    var error = Model?.Error?.Error;
+@{ var error = Model?.Error?.Error;
     var errorDescription = Model?.Error?.ErrorDescription;
-    var request_id = Model?.Error?.RequestId;
-}
+    var request_id = Model?.Error?.RequestId; }
 
 <div class="error-page">
     <div class="lead">
@@ -18,23 +16,19 @@
 
                 @if (error != null)
                 {
-                    <strong>
-                        <em>
-                            : @error
-                        </em>
-                    </strong>
-
-                    if (errorDescription != null)
-                    {
-                        <div>@errorDescription</div>
-                    }
-                }
+    <strong>
+        <em>
+            : @error
+        </em>
+    </strong> if (errorDescription != null)
+    {
+<div>@errorDescription</div>}
+}
             </div>
 
             @if (request_id != null)
             {
-                <div class="request-id">Request Id: @request_id</div>
-            }
+<div class="request-id">Request Id: @request_id</div>}
         </div>
     </div>
 </div>
