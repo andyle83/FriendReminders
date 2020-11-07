@@ -19,7 +19,8 @@ namespace IdentityServer
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("remindersmgt", "Reminders Management Service")
+                new ApiScope("remindersmgt_webapi", "Reminders Management Service from Web API"),
+                new ApiScope("remindersmgt_webmvc", "Reminders Management Service from Web MVC")
             };
 
         public static IEnumerable<Client> Clients =>
@@ -39,7 +40,7 @@ namespace IdentityServer
                     },
 
                     // scope for that client has access to
-                    AllowedScopes = { "remindersmgt" }
+                    AllowedScopes = { "remindersmgt_webapi" }
                 },
                 new Client
                 {
@@ -58,10 +59,14 @@ namespace IdentityServer
                     // where to redirect to after logout
                     PostLogoutRedirectUris = { "https://localhost:8001/signout-callback-oidc" },
 
+                    AllowOfflineAccess = true,
+                    AllowAccessTokensViaBrowser = true,
+
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "remindersmgt_webmvc"
                     }
                 }
             };

@@ -31,12 +31,16 @@ namespace WebMvc
                 options.Authority = "https://localhost:5001";
                 options.ClientId = "webmvc";
                 options.ClientSecret = "secret";
-                options.ResponseType = "code";
 
                 options.Scope.Add("profile");
                 options.GetClaimsFromUserInfoEndpoint = true;
 
                 options.SaveTokens = true;
+
+                options.ResponseType = "code";
+                options.UsePkce = true;
+                options.Scope.Add("remindersmgt_webmvc");
+                options.Scope.Add("offline_access");
             });
         }
 
