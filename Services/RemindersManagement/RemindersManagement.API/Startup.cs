@@ -50,7 +50,7 @@ namespace RemindersManagement.API
                 options.AddPolicy("ApiScope", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "remindersmgt");
+                    policy.RequireClaim("scope", new string[] { "remindersmgt_webapi", "remindersmgt_webmvc" });
                 });
             });
 

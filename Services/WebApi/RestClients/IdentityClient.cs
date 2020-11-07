@@ -42,7 +42,7 @@ namespace WebApi.RestClients
                 Address = disco.TokenEndpoint,
                 ClientId = "webapi",
                 ClientSecret = "secret",
-                Scope = "remindersmgt"
+                Scope = "remindersmgt_webapi"
             });
 
             if (tokenResponse.IsError)
