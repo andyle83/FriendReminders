@@ -4,12 +4,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
-<h2>Claims</h2>
+<h3>Claims</h3>
 
 <dl>
     @foreach (var claim in User.Claims)
@@ -19,7 +14,7 @@
     }
 </dl>
 
-<h2>Properties</h2>
+<h3>Properties</h3>
 
 <dl>
     @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)

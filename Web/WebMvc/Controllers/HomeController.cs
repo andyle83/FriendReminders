@@ -32,7 +32,7 @@ namespace WebMvc.Controllers
             var content = await client.GetStringAsync("https://localhost:7001/api/reminders");
 
             ViewBag.Json = JArray.Parse(content).ToString();
-            return View("json");
+            return View("Reminders");
         }
 
         public IActionResult Logout()
