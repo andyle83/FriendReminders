@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using WebApi.RestClients;
 
 namespace WebApi
@@ -23,6 +25,29 @@ namespace WebApi
                 .AddControllers()
                 .AddNewtonsoftJson();
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = Configuration.GetValue<string>("IdentityServer:Uri");
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = Configuration.GetValue<bool>("IdentityServer:ValidateAudience")
+                };
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiGwScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", new string[] { "remindersmgt_webmvc" });
+                });
+            });
+
             services.AddHttpClient();
             services.AddScoped<IIdentityClient, IdentityClient>();
             services.AddScoped<IReminderClient, RemindersClient>();
@@ -40,11 +65,14 @@ namespace WebApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints
+                    .MapControllers()
+                    .RequireAuthorization("ApiGwScope");
             });
         }
     }

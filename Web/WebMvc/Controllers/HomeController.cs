@@ -35,12 +35,14 @@ namespace WebMvc.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> CallApi()
+        [HttpGet]
+        [Route("Reminders/")]
+        public async Task<IActionResult> Reminders()
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var content = await client.GetStringAsync("https://localhost:6001/api/reminders");
+            var content = await client.GetStringAsync("https://localhost:7001/account/reminders");
 
             ViewBag.Json = JArray.Parse(content).ToString();
             return View("json");

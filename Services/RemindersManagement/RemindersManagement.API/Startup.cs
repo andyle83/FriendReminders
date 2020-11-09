@@ -35,22 +35,26 @@ namespace RemindersManagement.API
         {
             services.AddControllers();
 
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = Configuration.GetValue<string>("IdentityServer:Uri");
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.Authority = Configuration.GetValue<string>("IdentityServer:Uri");
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = Configuration.GetValue<bool>("IdentityServer:ValidateAudience")
-                    };
-                });
+                    ValidateAudience = Configuration.GetValue<bool>("IdentityServer:ValidateAudience")
+                };
+            });
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ApiScope", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", new string[] { "remindersmgt_webapi", "remindersmgt_webmvc" });
+                    policy.RequireClaim("scope", new string[] { "remindersmgt_webapi" });
                 });
             });
 
@@ -117,8 +121,10 @@ namespace RemindersManagement.API
             }
 
             app.UseSerilogRequestLogging();
+
             app.UseHttpsRedirection();
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
