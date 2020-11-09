@@ -434,3 +434,4 @@ $RECYCLE.BIN/
 
 .vs
 .history
+/Services/RemindersManagement/RemindersManagement.API/aws-logger-errors.txt

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -19,9 +20,15 @@ namespace WebMvc.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Claims()
+        {
+            return View("Claims");
         }
 
         public async Task<IActionResult> Reminders()
@@ -33,6 +40,11 @@ namespace WebMvc.Controllers
 
             ViewBag.Json = JArray.Parse(content).ToString();
             return View("Reminders");
+        }
+
+        public IActionResult Login()
+        {
+            return RedirectToAction("Reminders");
         }
 
         public IActionResult Logout()
